@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+  #tables
+      file: sql/initDB.sql
+      relativeToChangelogFile: true
+  - include:
+  #data
+      file: sql/populateDB.sql
+      relativeToChangelogFile: true
