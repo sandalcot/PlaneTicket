@@ -3,6 +3,9 @@ package com.ticketoffice.jdbc;
 import com.ticketoffice.model.*;
 import com.ticketoffice.repository.TicketRepository;
 import com.ticketoffice.util.ConnectionPool;
+import com.ticketoffice.util.mappers.PassObjectMapper;
+import com.ticketoffice.util.mappers.PlaneObjectMapper;
+import com.ticketoffice.util.mappers.RoutesObjectMapper;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -20,18 +23,18 @@ public class JavaJDBCTicketRepositoryImpl implements TicketRepository {
     private static final String UPDATE = "update " + TICKET_TABLE + " set date = ?, type_seat = ?, price = ?, id_plane = ?," +
             "id_passenger = ?, id_routes = ? where id_ticket = ?";
     private static final String DELETE = "delete from " + TICKET_TABLE + " where id_ticket = ?";
-    private static final String SELECT_ALL = "select * from " + TICKET_TABLE;
-    private static final String SELECT_BY_ID = SELECT_ALL + " where id_ticket = ?";
+    private static final String SELECT_ALL = "select t.id_ticket, t.date, t.type_seat,t.price,r.departure," +
+            "r.arrival, pl.name_plane, pas.name,pas.surname,pas.birthdate from ticket t inner join routes r on t.id_routes = r.id_routes" +
+            "inner join plane pl on t.id_plane = pl.id_plane inner join passenger pas on t.id_passenger = pas.id_passenger";
+    private static final String SELECT_BY_ID = SELECT_ALL + " where t.id_ticket = ?";
     private static final String SELECT_BY_ID_PASS = SELECT_ALL + " where id_passenger = ?";
 
     private Properties properties;
-    private Connection connection;
 
     public JavaJDBCTicketRepositoryImpl() {
         try {
             properties = new Properties();
             properties.load(getClass().getClassLoader().getResourceAsStream("liquibase/liquibase.properties"));
-            connection = ConnectionPool.getInstanceConnection(properties).getConnection();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -157,18 +160,15 @@ public class JavaJDBCTicketRepositoryImpl implements TicketRepository {
 
     protected Ticket createTicketFromResult(ResultSet resultSet) throws SQLException {
         Ticket ticket = new Ticket();
-        Plane plane = new Plane();
-        Passenger passenger = new Passenger();
-        Routes routes = new Routes();
-        ticket.setIdTicket(resultSet.getInt("id_ticket"));
-        ticket.setDate(resultSet.getString("date"));
-        ticket.setTypeSeat(TypeSeat.valueOf(resultSet.getString("type_seat")));
-        ticket.setPrice(resultSet.getInt("price"));
-        plane.setIdPlane(resultSet.getInt("id_plane"));
+        ticket.setIdTicket(resultSet.getInt("t.id_ticket"));
+        ticket.setDate(resultSet.getString("t.date"));
+        ticket.setTypeSeat(TypeSeat.valueOf(resultSet.getString("t.type_seat")));
+        ticket.setPrice(resultSet.getInt("t.price"));
+        Plane plane = PlaneObjectMapper.getPlaneMapper(resultSet);
         ticket.setPlane(plane);
-        passenger.setIdPass(resultSet.getInt("id_passenger"));
+        Passenger passenger = PassObjectMapper.getPassMapper(resultSet);
         ticket.setPassenger(passenger);
-        routes.setIdRoutes(resultSet.getInt("id_routes"));
+        Routes routes = RoutesObjectMapper.getRoutesMapper(resultSet);
         ticket.setRoutes(routes);
         return ticket;
     }

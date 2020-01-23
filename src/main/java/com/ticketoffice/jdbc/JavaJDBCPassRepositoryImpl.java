@@ -3,6 +3,7 @@ package com.ticketoffice.jdbc;
 import com.ticketoffice.model.Passenger;
 import com.ticketoffice.repository.PassengerRepository;
 import com.ticketoffice.util.ConnectionPool;
+import com.ticketoffice.util.mappers.PassObjectMapper;
 
 import java.io.IOException;
 import java.sql.*;
@@ -19,13 +20,11 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository {
     private static final String SELECT_BY_ID = SELECT_ALL + " where id_passenger = ?";
 
     private Properties properties;
-    private Connection connection;
 
     public JavaJDBCPassRepositoryImpl() {
         try {
             properties = new Properties();
             properties.load(getClass().getClassLoader().getResourceAsStream("liquibase/liquibase.properties"));
-            connection = ConnectionPool.getInstanceConnection(properties).getConnection();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,7 +61,7 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository {
                 .executeQuery(SELECT_ALL)) {
             List<Passenger> accounts = new ArrayList<>();
             while (resultSet.next()) {
-                accounts.add(createPassFromResult(resultSet));
+                accounts.add(PassObjectMapper.getPassMapper(resultSet));
             }
             return accounts;
         } catch (SQLException e) {
@@ -80,7 +79,7 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository {
             prepareStatement.setInt(1, id);
             try (ResultSet resultSet = prepareStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    return createPassFromResult(resultSet);
+                    return PassObjectMapper.getPassMapper(resultSet);
                 }
             }
             return null;
@@ -121,14 +120,5 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository {
         } finally {
             ConnectionPool.getInstanceConnection(properties).closeConnection(connection);
         }
-    }
-
-    protected Passenger createPassFromResult(ResultSet resultSet) throws SQLException {
-        Passenger passenger = new Passenger();
-        passenger.setIdPass(resultSet.getInt("id_passenger"));
-        passenger.setName(resultSet.getString("name"));
-        passenger.setSurname(resultSet.getString("surname"));
-        passenger.setBirthdate(resultSet.getString("birthdate"));
-        return passenger;
     }
 }

@@ -3,6 +3,7 @@ package com.ticketoffice.jdbc;
 import com.ticketoffice.model.Routes;
 import com.ticketoffice.repository.RoutesRepository;
 import com.ticketoffice.util.ConnectionPool;
+import com.ticketoffice.util.mappers.RoutesObjectMapper;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -22,13 +23,11 @@ public class JavaJDBCRoutesRepositoryImpl implements RoutesRepository {
     private static final String SELECT_BY_ID = SELECT_ALL + " where id_routes = ?";
 
     private Properties properties;
-    private Connection connection;
 
     public JavaJDBCRoutesRepositoryImpl() {
         try {
             properties = new Properties();
             properties.load(getClass().getClassLoader().getResourceAsStream("liquibase/liquibase.properties"));
-            connection = ConnectionPool.getInstanceConnection(properties).getConnection();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,7 +64,7 @@ public class JavaJDBCRoutesRepositoryImpl implements RoutesRepository {
                 .executeQuery(SELECT_ALL)) {
             List<Routes> accounts = new ArrayList<>();
             while (resultSet.next()) {
-                accounts.add(createRouteFromResult(resultSet));
+                accounts.add(RoutesObjectMapper.getRoutesMapper(resultSet));
             }
             return accounts;
         } catch (SQLException e) {
@@ -83,7 +82,7 @@ public class JavaJDBCRoutesRepositoryImpl implements RoutesRepository {
             prepareStatement.setInt(1, id);
             try (ResultSet resultSet = prepareStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    return createRouteFromResult(resultSet);
+                    return RoutesObjectMapper.getRoutesMapper(resultSet);
                 }
             }
             return null;
@@ -122,13 +121,5 @@ public class JavaJDBCRoutesRepositoryImpl implements RoutesRepository {
         } finally {
             ConnectionPool.getInstanceConnection(properties).closeConnection(connection);
         }
-    }
-
-    protected Routes createRouteFromResult(ResultSet resultSet) throws SQLException {
-        Routes route = new Routes();
-        route.setIdRoutes(resultSet.getInt("id_routes"));
-        route.setDeparture(resultSet.getString("departure"));
-        route.setArrival(resultSet.getString("arrival"));
-        return route;
     }
 }

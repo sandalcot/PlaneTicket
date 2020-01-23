@@ -3,6 +3,7 @@ package com.ticketoffice.jdbc;
 import com.ticketoffice.model.Plane;
 import com.ticketoffice.repository.PlaneRepository;
 import com.ticketoffice.util.ConnectionPool;
+import com.ticketoffice.util.mappers.PlaneObjectMapper;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -22,13 +23,11 @@ public class JavaJDBCPlaneRepositoryImpl implements PlaneRepository {
     private static final String SELECT_BY_ID = SELECT_ALL + " where id_plane = ?";
 
     private Properties properties;
-    private Connection connection;
 
     public JavaJDBCPlaneRepositoryImpl() {
         try {
             properties = new Properties();
             properties.load(getClass().getClassLoader().getResourceAsStream("liquibase/liquibase.properties"));
-            connection = ConnectionPool.getInstanceConnection(properties).getConnection();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,7 +64,7 @@ public class JavaJDBCPlaneRepositoryImpl implements PlaneRepository {
                 .executeQuery(SELECT_ALL)) {
             List<Plane> accounts = new ArrayList<>();
             while (resultSet.next()) {
-                accounts.add(createPlaneFromResult(resultSet));
+                accounts.add(PlaneObjectMapper.getPlaneMapper(resultSet));
             }
             return accounts;
         } catch (SQLException e) {
@@ -83,7 +82,7 @@ public class JavaJDBCPlaneRepositoryImpl implements PlaneRepository {
             prepareStatement.setInt(1, id);
             try (ResultSet resultSet = prepareStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    return createPlaneFromResult(resultSet);
+                    return PlaneObjectMapper.getPlaneMapper(resultSet);
                 }
             }
             return null;
