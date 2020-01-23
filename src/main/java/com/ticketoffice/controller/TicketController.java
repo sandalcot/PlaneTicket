@@ -1,7 +1,7 @@
 package com.ticketoffice.controller;
 
 import com.ticketoffice.model.Ticket;
-import com.ticketoffice.repository.JavaJDBCTicketRepositoryImpl;
+import com.ticketoffice.jdbc.JavaJDBCTicketRepositoryImpl;
 import com.ticketoffice.repository.TicketRepository;
 
 import java.util.List;

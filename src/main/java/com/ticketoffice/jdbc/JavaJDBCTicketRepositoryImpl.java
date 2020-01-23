@@ -1,7 +1,7 @@
-package com.ticketoffice.repository;
+package com.ticketoffice.jdbc;
 
-import com.ticketoffice.model.Ticket;
-import com.ticketoffice.model.TypeSeat;
+import com.ticketoffice.model.*;
+import com.ticketoffice.repository.TicketRepository;
 import com.ticketoffice.util.ConnectionPool;
 
 import java.io.IOException;
@@ -124,9 +124,9 @@ public class JavaJDBCTicketRepositoryImpl implements TicketRepository {
             preparedStatement.setString(1, ticket.getDate());
             preparedStatement.setString(2, ticket.getTypeSeat().toString());
             preparedStatement.setInt(3, ticket.getPrice());
-            preparedStatement.setInt(4, ticket.getIdPlane());
-            preparedStatement.setInt(5, ticket.getIdPass());
-            preparedStatement.setInt(6, ticket.getIdRoutes());
+            preparedStatement.setInt(4, ticket.getPlane().getIdPlane());
+            preparedStatement.setInt(5, ticket.getPassenger().getIdPass());
+            preparedStatement.setInt(6, ticket.getRoutes().getIdRoutes());
             preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
@@ -142,9 +142,9 @@ public class JavaJDBCTicketRepositoryImpl implements TicketRepository {
             preparedStatement.setString(1, ticket.getDate());
             preparedStatement.setString(2, ticket.getTypeSeat().toString());
             preparedStatement.setInt(3, ticket.getPrice());
-            preparedStatement.setInt(4, ticket.getIdPlane());
-            preparedStatement.setInt(5, ticket.getIdPass());
-            preparedStatement.setInt(6, ticket.getIdRoutes());
+            preparedStatement.setInt(4, ticket.getPlane().getIdPlane());
+            preparedStatement.setInt(5, ticket.getPassenger().getIdPass());
+            preparedStatement.setInt(6, ticket.getRoutes().getIdRoutes());
             preparedStatement.setInt(7, ticket.getIdTicket());
             preparedStatement.executeUpdate();
             connection.commit();
@@ -157,13 +157,19 @@ public class JavaJDBCTicketRepositoryImpl implements TicketRepository {
 
     protected Ticket createTicketFromResult(ResultSet resultSet) throws SQLException {
         Ticket ticket = new Ticket();
+        Plane plane = new Plane();
+        Passenger passenger = new Passenger();
+        Routes routes = new Routes();
         ticket.setIdTicket(resultSet.getInt("id_ticket"));
         ticket.setDate(resultSet.getString("date"));
         ticket.setTypeSeat(TypeSeat.valueOf(resultSet.getString("type_seat")));
         ticket.setPrice(resultSet.getInt("price"));
-        ticket.setIdPlane(resultSet.getInt("id_plane"));
-        ticket.setIdPass(resultSet.getInt("id_passenger"));
-        ticket.setIdRoutes(resultSet.getInt("id_routes"));
+        plane.setIdPlane(resultSet.getInt("id_plane"));
+        ticket.setPlane(plane);
+        passenger.setIdPass(resultSet.getInt("id_passenger"));
+        ticket.setPassenger(passenger);
+        routes.setIdRoutes(resultSet.getInt("id_routes"));
+        ticket.setRoutes(routes);
         return ticket;
     }
 }

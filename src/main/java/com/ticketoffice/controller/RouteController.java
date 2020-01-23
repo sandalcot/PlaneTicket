@@ -1,7 +1,7 @@
 package com.ticketoffice.controller;
 
 import com.ticketoffice.model.Routes;
-import com.ticketoffice.repository.JavaJDBCRoutesRepositoryImpl;
+import com.ticketoffice.jdbc.JavaJDBCRoutesRepositoryImpl;
 import com.ticketoffice.repository.RoutesRepository;
 
 import java.util.List;

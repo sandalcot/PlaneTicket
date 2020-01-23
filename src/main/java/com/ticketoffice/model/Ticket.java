@@ -5,30 +5,30 @@ public class Ticket {
     private String date;
     private TypeSeat typeSeat;
     private int price;
-    private int idPlane;
-    private int idPass;
-    private int idRoutes;
+    private Plane plane;
+    private Passenger passenger;
+    private Routes routes;
 
     public Ticket() {
     }
 
-    public Ticket(int idTicket, String date, TypeSeat typeSeat, int price, int idPlane, int idPass, int idRoutes) {
+    public Ticket(int idTicket, String date, TypeSeat typeSeat, int price, Plane plane, Passenger passenger, Routes routes) {
         this.idTicket = idTicket;
         this.date = date;
         this.typeSeat = typeSeat;
         this.price = price;
-        this.idPlane = idPlane;
-        this.idPass = idPass;
-        this.idRoutes = idRoutes;
+        this.plane = plane;
+        this.passenger = passenger;
+        this.routes = routes;
     }
 
-    public Ticket(String date, TypeSeat typeSeat, int price, int idPlane, int idPass, int idRoutes) {
+    public Ticket(String date, TypeSeat typeSeat, int price, Plane plane, Passenger passenger, Routes routes) {
         this.date = date;
         this.typeSeat = typeSeat;
         this.price = price;
-        this.idPlane = idPlane;
-        this.idPass = idPass;
-        this.idRoutes = idRoutes;
+        this.plane = plane;
+        this.passenger = passenger;
+        this.routes = routes;
     }
 
     public int getIdTicket() {
@@ -63,27 +63,29 @@ public class Ticket {
         this.price = price;
     }
 
-    public int getIdPlane() {
-        return idPlane;
+    public Plane getPlane() {
+        return plane;
     }
 
-    public void setIdPlane(int idPlane) {
-        this.idPlane = idPlane;
+    public void setPlane(Plane plane) {
+        this.plane = plane;
     }
 
-    public int getIdPass() {
-        return idPass;
+    public Passenger getPassenger() {
+        return passenger;
     }
 
-    public void setIdPass(int idPass) {
-        this.idPass = idPass;
+    public void setPassenger(Passenger passenger) {
+        this.passenger = passenger;
     }
 
-    public int getIdRoutes() {
-        return idRoutes;
+    public Routes getRoutes() {
+        return routes;
     }
 
-    public void setIdRoutes(int idRoutes) {
-        this.idRoutes = idRoutes;
+    public void setRoutes(Routes routes) {
+        this.routes = routes;
     }
 }
+
+

@@ -1,7 +1,7 @@
 package com.ticketoffice.controller;
 
 import com.ticketoffice.model.Plane;
-import com.ticketoffice.repository.JavaJDBCPlaneRepositoryImpl;
+import com.ticketoffice.jdbc.JavaJDBCPlaneRepositoryImpl;
 import com.ticketoffice.repository.PlaneRepository;
 
 import java.util.List;

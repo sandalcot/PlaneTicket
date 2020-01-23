@@ -1,26 +1,30 @@
-package com.ticketoffice.repository;
+package com.ticketoffice.jdbc;
 
-import com.ticketoffice.model.Passenger;
+import com.ticketoffice.model.Routes;
+import com.ticketoffice.repository.RoutesRepository;
 import com.ticketoffice.util.ConnectionPool;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class JavaJDBCPassRepositoryImpl implements PassengerRepository{
-    private static final String PASS_TABLE = "passenger";
-    private static final String INSERT = "insert into " + PASS_TABLE + " (name, surname, birthdate) VALUES(?, ?, ?)";
-    private static final String UPDATE = "update " + PASS_TABLE + " set name = ?, surname = ?, birthdate = ? where id_passenger = ?";
-    private static final String DELETE = "delete from " + PASS_TABLE + " where id_passenger = ?";
-    private static final String SELECT_ALL = "select * from " + PASS_TABLE;
-    private static final String SELECT_BY_ID = SELECT_ALL + " where id_passenger = ?";
+public class JavaJDBCRoutesRepositoryImpl implements RoutesRepository {
+    private static final String ROUTES_TABLE = "routes";
+    private static final String INSERT = "insert into " + ROUTES_TABLE + " (departure, arrival) VALUES(?,?)";
+    private static final String UPDATE = "update " + ROUTES_TABLE + " set departure = ?, arrival = ? where id_routes = ?";
+    private static final String DELETE = "delete from " + ROUTES_TABLE + " where id_routes = ?";
+    private static final String SELECT_ALL = "select * from " + ROUTES_TABLE;
+    private static final String SELECT_BY_ID = SELECT_ALL + " where id_routes = ?";
 
     private Properties properties;
     private Connection connection;
 
-    public JavaJDBCPassRepositoryImpl() {
+    public JavaJDBCRoutesRepositoryImpl() {
         try {
             properties = new Properties();
             properties.load(getClass().getClassLoader().getResourceAsStream("liquibase/liquibase.properties"));
@@ -31,13 +35,13 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository{
     }
 
     @Override
-    public void create(Passenger passenger) throws Exception {
-       setParameterPass(passenger, INSERT);
+    public void create(Routes routes) throws Exception {
+        setParameterRouter(routes, INSERT);
     }
 
     @Override
-    public void update(Passenger passenger) throws Exception {
-      updatePass(passenger,UPDATE);
+    public void update(Routes routes) throws Exception {
+        updateRoutes(routes,UPDATE);
     }
 
     @Override
@@ -55,13 +59,13 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository{
     }
 
     @Override
-    public List<Passenger> getAll() throws IOException, SQLException, ClassNotFoundException, InterruptedException {
+    public List<Routes> getAll() throws IOException, SQLException, ClassNotFoundException, InterruptedException {
         Connection connection = ConnectionPool.getInstanceConnection(properties).getConnection();
         try (ResultSet resultSet = connection.createStatement()
                 .executeQuery(SELECT_ALL)) {
-            List<Passenger> accounts = new ArrayList<>();
+            List<Routes> accounts = new ArrayList<>();
             while (resultSet.next()) {
-                accounts.add(createPassFromResult(resultSet));
+                accounts.add(createRouteFromResult(resultSet));
             }
             return accounts;
         } catch (SQLException e) {
@@ -73,13 +77,13 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository{
     }
 
     @Override
-    public Passenger getId(Integer id) throws Exception {
+    public Routes getId(Integer id) throws Exception {
         Connection connection = ConnectionPool.getInstanceConnection(properties).getConnection();
         try (PreparedStatement prepareStatement = connection.prepareStatement(SELECT_BY_ID)) {
             prepareStatement.setInt(1, id);
             try (ResultSet resultSet = prepareStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    return createPassFromResult(resultSet);
+                    return createRouteFromResult(resultSet);
                 }
             }
             return null;
@@ -91,12 +95,11 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository{
         }
     }
 
-    private void setParameterPass(Passenger passenger, String query) throws Exception {
+    private void setParameterRouter(Routes routes, String query) throws Exception {
         Connection connection = ConnectionPool.getInstanceConnection(properties).getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, passenger.getName());
-            preparedStatement.setString(2, passenger.getSurname());
-            preparedStatement.setString(3, passenger.getBirthdate());
+            preparedStatement.setString(1, routes.getDeparture());
+            preparedStatement.setString(2, routes.getArrival());
             preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
@@ -106,13 +109,12 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository{
         }
     }
 
-    private void updatePass(Passenger passenger, String query) throws Exception {
+    private void updateRoutes(Routes routes, String query) throws Exception {
         Connection connection = ConnectionPool.getInstanceConnection(properties).getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, passenger.getName());
-            preparedStatement.setString(2, passenger.getSurname());
-            preparedStatement.setString(3, passenger.getBirthdate());
-            preparedStatement.setInt(4,passenger.getIdPass());
+            preparedStatement.setString(1, routes.getDeparture());
+            preparedStatement.setString(2, routes.getArrival());
+            preparedStatement.setInt(3,routes.getIdRoutes());
             preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
@@ -122,12 +124,11 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository{
         }
     }
 
-    protected Passenger createPassFromResult(ResultSet resultSet) throws SQLException {
-        Passenger passenger = new Passenger();
-        passenger.setIdPass(resultSet.getInt("id_passenger"));
-        passenger.setName(resultSet.getString("name"));
-        passenger.setSurname(resultSet.getString("surname"));
-        passenger.setBirthdate(resultSet.getString("birthdate"));
-        return passenger;
+    protected Routes createRouteFromResult(ResultSet resultSet) throws SQLException {
+        Routes route = new Routes();
+        route.setIdRoutes(resultSet.getInt("id_routes"));
+        route.setDeparture(resultSet.getString("departure"));
+        route.setArrival(resultSet.getString("arrival"));
+        return route;
     }
 }

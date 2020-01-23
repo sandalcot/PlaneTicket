@@ -1,6 +1,7 @@
-package com.ticketoffice.repository;
+package com.ticketoffice.jdbc;
 
 import com.ticketoffice.model.Plane;
+import com.ticketoffice.repository.PlaneRepository;
 import com.ticketoffice.util.ConnectionPool;
 
 import java.io.IOException;
