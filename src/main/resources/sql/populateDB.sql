@@ -1,6 +1,3 @@
---liquibase formatted sql
---changeset tigratius:5
-
 insert into passenger VALUES (1,'Paul','Join','1998-08-13');
 insert into passenger VALUES (2,'Roma','Kudi','1990-11-11');
 insert into passenger VALUES (3,'Olga','Kudi','1976-09-08');

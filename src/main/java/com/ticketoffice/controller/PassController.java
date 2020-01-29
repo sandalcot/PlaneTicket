@@ -1,7 +1,7 @@
 package com.ticketoffice.controller;
 
 import com.ticketoffice.model.Passenger;
-import com.ticketoffice.jdbc.JavaJDBCPassRepositoryImpl;
+import com.ticketoffice.repository.jdbc.JavaJDBCPassRepositoryImpl;
 import com.ticketoffice.repository.PassengerRepository;
 
 import java.util.List;

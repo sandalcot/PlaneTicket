@@ -1,3 +1,5 @@
+package com.ticketoffice;
+
 import com.ticketoffice.view.ConsoleHelper;
 
 public class Start {

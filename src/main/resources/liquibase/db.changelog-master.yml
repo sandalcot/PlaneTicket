@@ -1,9 +1,197 @@
 databaseChangeLog:
-  - include:
-  #tables
-      file: sql/initDB.sql
-      relativeToChangelogFile: true
-  - include:
-  #data
-      file: sql/populateDB.sql
-      relativeToChangelogFile: true
+        - changeSet:
+            id: 1
+            author: luc
+            comment: "Create table passenger"
+            changes:
+              - createTable:
+                  tableName: passenger
+                  columns:
+                    - column:
+                        name: id_passenger
+                        type: int
+                        constraints:
+                          primaryKey: true
+                          nullable: false
+                    - column:
+                         name: name
+                         type: varchar(45)
+                         constraints:
+                         nullable: false
+                    - column:
+                          name: surname
+                          type: varchar(45)
+                          constraints:
+                          nullable: false
+                    - column:
+                          name: birthdate
+                          type: date
+                          constraints:
+                          nullable: false
+        - changeSet:
+            id: 2
+            author: luc
+            comment: "Create table plane"
+            changes:
+              - createTable:
+                  tableName: plane
+                  columns:
+                    - column:
+                        name: id_plane
+                        type: int
+                        constraints:
+                          primaryKey: true
+                          nullable: false
+                    - column:
+                        name: name_plane
+                        type: varchar(45)
+                        constraints:
+                        nullable: false
+        - changeSet:
+            id: 3
+            author: luc
+            comment: "Create table routes"
+            changes:
+              - createTable:
+                  tableName: routes
+                  columns:
+                    - column:
+                        name: id_routes
+                        type: int
+                        constraints:
+                          primaryKey: true
+                          nullable: false
+                    - column:
+                        name: departure
+                        type: varchar(45)
+                        constraints:
+                        nullable: false
+                    - column:
+                        name: departure
+                        type: varchar(45)
+                        constraints:
+                        nullable: false
+        - changeSet:
+            id: 4
+            author: luc
+            comment: "Create table ticket"
+            changes:
+              - createTable:
+                  tableName: ticket
+                  columns:
+                    - column:
+                        name: id_ticket
+                        type: int
+                        constraints:
+                          primaryKey: true
+                          nullable: false
+                    - column:
+                        name: date
+                        type: datetime
+                        constraints:
+                        nullable: false
+                    - column:
+                        name: type_seat
+                        type: varchar(45)
+                        constraints:
+                        nullable: false
+                    - column:
+                        name: price
+                        type: int
+                        constraints:
+                        nullable: false
+                    - column:
+                        name: id_plane
+                        type: int
+                        constraints:
+                        nullable: false
+                        foreignKeyName: ticket_plane_id_plane_fk
+                        references: plane(id_plane)
+                        onDelete: CASCADE
+                        onUpdate: CASCADE
+                    - column:
+                        name: id_passenger
+                        type: int
+                        constraints:
+                        nullable: false
+                        foreignKeyName: ticket_passenger_id_passenger_fk
+                        references: passenger(id_passenger)
+                        onDelete: CASCADE
+                        onUpdate: CASCADE
+                    - column:
+                        name: id_routes
+                        type: int
+                        constraints:
+                        nullable: false
+                        foreignKeyName: ticket_routes_id_routes_fk
+                        references: routes(id_routes)
+                        onDelete: CASCADE
+                        onUpdate: CASCADE
+        - changeSet:
+            id: 5
+            author: luc
+            comment: "Insert into passenger"
+            changes:
+              - sql:
+                  sql: insert into passenger VALUES (1,'Paul','Join','1998-08-13')
+              - sql:
+                  sql: insert into passenger VALUES (2,'Roma','Kudi','1990-11-11')
+              - sql:
+                  sql: insert into passenger VALUES (3,'Olga','Kudi','1976-09-08')
+              - sql:
+                  sql: insert into passenger VALUES (4,'Ivan','Globa','1954-01-26')
+              - sql:
+                  sql: insert into passenger VALUES (5,'Sally','Moon','1982-12-11')
+              - sql:
+                  sql: insert into passenger VALUES (6,'Lev','Lion','1845-09-15')
+        - changeSet:
+            id: 6
+            author: luc
+            comment: "Insert into plane"
+            changes:
+              - sql:
+                  sql: insert into plane VALUES (1,'Boeing 777')
+              - sql:
+                  sql: insert into plane VALUES (2,'Boeing 747')
+              - sql:
+                  sql: insert into plane VALUES (3,'Boeing 787 Dreamliner')
+        - changeSet:
+            id: 7
+            author: luc
+            comment: "Insert into routes"
+            changes:
+              - sql:
+                  sql: insert into routes VALUES (1,'Moscow','Bali')
+              - sql:
+                  sql: insert into routes VALUES (2,'Moscow','Paris')
+              - sql:
+                  sql: insert into routes VALUES (3,'Paris','NY')
+              - sql:
+                  sql: insert into routes VALUES (4,'NY','Moscow')
+              - sql:
+                  sql: insert into routes VALUES (5,'Bali','Tehran')
+        - changeSet:
+            id: 8
+            author: luc
+            comment: "Insert into ticket"
+            changes:
+              - sql:
+                  sql: insert into ticket VALUES (1,'2019-01-26 22:09:12','VIP',1500,1,2,3)
+              - sql:
+                  sql: insert into ticket VALUES (2,'2019-03-11 13:00:00','ECONOMY',700,2,6,1)
+              - sql:
+                  sql: insert into ticket VALUES (3,'2019-09-01 09:30:22','VIP',1500,3,4,2)
+              - sql:
+                  sql: insert into ticket VALUES (4,'2019-10-23 06:00:00','ECONOMY',500,1,2,3)
+              - sql:
+                  sql: insert into ticket VALUES (5,'2019-10-01 15:20:00','ECONOMY',300,1,1,3)
+              - sql:
+                  sql: insert into ticket VALUES (6,'2019-11-01 17:45:00','VIP',1000,2,1,5)
+              - sql:
+                  sql: insert into ticket VALUES (7,'2019-11-03 20:05:05','VIP',1200,3,6,4)
+              - sql:
+                  sql: insert into ticket VALUES (8,'2019-11-15 23:25:00','ECONOMY',700,2,5,3)
+              - sql:
+                  sql: insert into ticket VALUES (9,'2019-12-24 00:00:00','VIP',2000,1,4,5)
+              - sql:
+                  sql: insert into ticket VALUES (10,'2019-12-29 06:30:00','VIP',2000,1,3,2)

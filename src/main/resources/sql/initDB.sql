@@ -1,6 +1,3 @@
---liquibase formatted sql
---changeset tigratius:1
-
 create table passenger
 (
     id_passenger int auto_increment,
@@ -11,7 +8,6 @@ create table passenger
         primary key (id_passenger)
 );
 
---changeset TestUsers_sql:2
 
 create table plane
   (
@@ -21,7 +17,6 @@ create table plane
           primary key (id_plane)
   );
 
---changeset TestUsers_sql:3
 
 create table routes
 (
@@ -32,7 +27,6 @@ create table routes
         primary key (id_routes)
 );
 
---changeset TestUsers_sql:4
 
 create table ticket
 (

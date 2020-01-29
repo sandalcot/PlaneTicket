@@ -1,4 +1,4 @@
-package com.ticketoffice.jdbc;
+package com.ticketoffice.repository.jdbc;
 
 import com.ticketoffice.model.Routes;
 import com.ticketoffice.repository.RoutesRepository;

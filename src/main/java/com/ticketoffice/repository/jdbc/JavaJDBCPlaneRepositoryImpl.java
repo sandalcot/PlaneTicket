@@ -1,4 +1,4 @@
-package com.ticketoffice.jdbc;
+package com.ticketoffice.repository.jdbc;
 
 import com.ticketoffice.model.Plane;
 import com.ticketoffice.repository.PlaneRepository;
