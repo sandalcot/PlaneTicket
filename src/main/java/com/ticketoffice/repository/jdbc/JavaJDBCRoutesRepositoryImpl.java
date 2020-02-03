@@ -53,7 +53,7 @@ public class JavaJDBCRoutesRepositoryImpl implements RoutesRepository {
                 .executeQuery(SELECT_ALL)) {
             List<Routes> accounts = new ArrayList<>();
             while (resultSet.next()) {
-                accounts.add(RoutesObjectMapper.getRoutesMapper(resultSet));
+                accounts.add(RoutesObjectMapper.mapToRoutes(resultSet));
             }
             return accounts;
         } catch (SQLException e) {
@@ -71,7 +71,7 @@ public class JavaJDBCRoutesRepositoryImpl implements RoutesRepository {
             prepareStatement.setInt(1, id);
             try (ResultSet resultSet = prepareStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    return RoutesObjectMapper.getRoutesMapper(resultSet);
+                    return RoutesObjectMapper.mapToRoutes(resultSet);
                 }
             }
             return null;

@@ -153,11 +153,11 @@ public class JavaJDBCTicketRepositoryImpl implements TicketRepository {
         ticket.setDate(resultSet.getString("t.date"));
         ticket.setTypeSeat(TypeSeat.valueOf(resultSet.getString("t.type_seat")));
         ticket.setPrice(resultSet.getInt("t.price"));
-        Plane plane = PlaneObjectMapper.getPlaneMapper(resultSet);
+        Plane plane = PlaneObjectMapper.mapToPlane(resultSet);
         ticket.setPlane(plane);
-        Passenger passenger = PassObjectMapper.getPassMapper(resultSet);
+        Passenger passenger = PassObjectMapper.mapToPass(resultSet);
         ticket.setPassenger(passenger);
-        Routes routes = RoutesObjectMapper.getRoutesMapper(resultSet);
+        Routes routes = RoutesObjectMapper.mapToRoutes(resultSet);
         ticket.setRoutes(routes);
         return ticket;
     }

@@ -53,7 +53,7 @@ public class JavaJDBCPlaneRepositoryImpl implements PlaneRepository {
                 .executeQuery(SELECT_ALL)) {
             List<Plane> accounts = new ArrayList<>();
             while (resultSet.next()) {
-                accounts.add(PlaneObjectMapper.getPlaneMapper(resultSet));
+                accounts.add(PlaneObjectMapper.mapToPlane(resultSet));
             }
             return accounts;
         } catch (SQLException e) {
@@ -71,7 +71,7 @@ public class JavaJDBCPlaneRepositoryImpl implements PlaneRepository {
             prepareStatement.setInt(1, id);
             try (ResultSet resultSet = prepareStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    return PlaneObjectMapper.getPlaneMapper(resultSet);
+                    return PlaneObjectMapper.mapToPlane(resultSet);
                 }
             }
             return null;

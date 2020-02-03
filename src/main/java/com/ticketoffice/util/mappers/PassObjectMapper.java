@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PassObjectMapper {
-    public static Passenger getPassMapper(ResultSet resultSet) throws SQLException {
+    public static Passenger mapToPass(ResultSet resultSet) throws SQLException {
         Passenger passenger = new Passenger();
         passenger.setIdPass(resultSet.getInt("id_passenger"));
         passenger.setName(resultSet.getString("name"));

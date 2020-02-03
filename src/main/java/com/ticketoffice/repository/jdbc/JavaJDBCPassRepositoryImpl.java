@@ -51,7 +51,7 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository {
                 .executeQuery(SELECT_ALL)) {
             List<Passenger> accounts = new ArrayList<>();
             while (resultSet.next()) {
-                accounts.add(PassObjectMapper.getPassMapper(resultSet));
+                accounts.add(PassObjectMapper.mapToPass(resultSet));
             }
             return accounts;
         } catch (SQLException e) {
@@ -69,7 +69,7 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository {
             prepareStatement.setInt(1, id);
             try (ResultSet resultSet = prepareStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    return PassObjectMapper.getPassMapper(resultSet);
+                    return PassObjectMapper.mapToPass(resultSet);
                 }
             }
             return null;
