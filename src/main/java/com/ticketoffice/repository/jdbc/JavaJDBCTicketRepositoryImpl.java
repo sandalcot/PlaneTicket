@@ -29,17 +29,6 @@ public class JavaJDBCTicketRepositoryImpl implements TicketRepository {
     private static final String SELECT_BY_ID = SELECT_ALL + " where t.id_ticket = ?";
     private static final String SELECT_BY_ID_PASS = SELECT_ALL + " where id_passenger = ?";
 
-    private Properties properties;
-
-    public JavaJDBCTicketRepositoryImpl() {
-        try {
-            properties = new Properties();
-            properties.load(getClass().getClassLoader().getResourceAsStream("liquibase/liquibase.properties"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void create(Ticket ticket) throws Exception {
         setParameterTicket(ticket, INSERT);
@@ -51,8 +40,8 @@ public class JavaJDBCTicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
-    public void delete(Integer id) throws SQLException, ClassNotFoundException, InterruptedException {
-        Connection connection = ConnectionPool.getInstanceConnection(properties).getConnection();
+    public void delete(Integer id) throws SQLException, ClassNotFoundException, InterruptedException, IOException {
+        Connection connection = ConnectionPool.getInstanceConnection().getConnection();
         try (PreparedStatement prepareStatement = connection.prepareStatement(DELETE)) {
             prepareStatement.setInt(1, id);
             prepareStatement.executeUpdate();
@@ -60,13 +49,13 @@ public class JavaJDBCTicketRepositoryImpl implements TicketRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionPool.getInstanceConnection(properties).closeConnection(connection);
+            ConnectionPool.getInstanceConnection().closeConnection(connection);
         }
     }
 
     @Override
     public List<Ticket> getAll() throws IOException, SQLException, ClassNotFoundException, InterruptedException {
-        Connection connection = ConnectionPool.getInstanceConnection(properties).getConnection();
+        Connection connection = ConnectionPool.getInstanceConnection().getConnection();
         try (ResultSet resultSet = connection.createStatement()
                 .executeQuery(SELECT_ALL)) {
             List<Ticket> accounts = new ArrayList<>();
@@ -78,13 +67,13 @@ public class JavaJDBCTicketRepositoryImpl implements TicketRepository {
             e.printStackTrace();
             return null;
         } finally {
-            ConnectionPool.getInstanceConnection(properties).closeConnection(connection);
+            ConnectionPool.getInstanceConnection().closeConnection(connection);
         }
     }
 
     @Override
     public Ticket getId(Integer id) throws Exception {
-        Connection connection = ConnectionPool.getInstanceConnection(properties).getConnection();
+        Connection connection = ConnectionPool.getInstanceConnection().getConnection();
         try (PreparedStatement prepareStatement = connection.prepareStatement(SELECT_BY_ID)) {
             prepareStatement.setInt(1, id);
             try (ResultSet resultSet = prepareStatement.executeQuery()) {
@@ -97,13 +86,13 @@ public class JavaJDBCTicketRepositoryImpl implements TicketRepository {
             e.printStackTrace();
             return null;
         } finally {
-            ConnectionPool.getInstanceConnection(properties).closeConnection(connection);
+            ConnectionPool.getInstanceConnection().closeConnection(connection);
         }
     }
 
     @Override
-    public List<Ticket> getIdTicketPass(Integer id) throws SQLException, ClassNotFoundException, InterruptedException {
-        Connection connection = ConnectionPool.getInstanceConnection(properties).getConnection();
+    public List<Ticket> getIdTicketPass(Integer id) throws SQLException, ClassNotFoundException, InterruptedException, IOException {
+        Connection connection = ConnectionPool.getInstanceConnection().getConnection();
         List<Ticket> tickets = new ArrayList<>();
         try (PreparedStatement prepareStatement = connection.prepareStatement(SELECT_BY_ID_PASS)) {
             prepareStatement.setInt(1, id);
@@ -117,12 +106,12 @@ public class JavaJDBCTicketRepositoryImpl implements TicketRepository {
             e.printStackTrace();
             return null;
         } finally {
-            ConnectionPool.getInstanceConnection(properties).closeConnection(connection);
+            ConnectionPool.getInstanceConnection().closeConnection(connection);
         }
     }
 
     private void setParameterTicket(Ticket ticket, String query) throws Exception {
-        Connection connection = ConnectionPool.getInstanceConnection(properties).getConnection();
+        Connection connection = ConnectionPool.getInstanceConnection().getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, ticket.getDate());
             preparedStatement.setString(2, ticket.getTypeSeat().toString());
@@ -135,12 +124,12 @@ public class JavaJDBCTicketRepositoryImpl implements TicketRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionPool.getInstanceConnection(properties).closeConnection(connection);
+            ConnectionPool.getInstanceConnection().closeConnection(connection);
         }
     }
 
     private void updateTicket(Ticket ticket, String query) throws Exception {
-        Connection connection = ConnectionPool.getInstanceConnection(properties).getConnection();
+        Connection connection = ConnectionPool.getInstanceConnection().getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, ticket.getDate());
             preparedStatement.setString(2, ticket.getTypeSeat().toString());
@@ -154,7 +143,7 @@ public class JavaJDBCTicketRepositoryImpl implements TicketRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionPool.getInstanceConnection(properties).closeConnection(connection);
+            ConnectionPool.getInstanceConnection().closeConnection(connection);
         }
     }
 

@@ -1,14 +1,14 @@
 package com.ticketoffice.model;
 
 public class Plane {
-    private int idPlane;
+    private Integer id;
     private String name;
 
     public Plane() {
     }
 
-    public Plane(int idPlane, String name) {
-        this.idPlane = idPlane;
+    public Plane(Integer id, String name) {
+        this.id = id;
         this.name = name;
     }
 
@@ -16,12 +16,12 @@ public class Plane {
         this.name = name;
     }
 
-    public int getIdPlane() {
-        return idPlane;
+    public Integer getIdPlane() {
+        return id;
     }
 
     public void setIdPlane(int idPlane) {
-        this.idPlane = idPlane;
+        this.id = id;
     }
 
     public String getName() {

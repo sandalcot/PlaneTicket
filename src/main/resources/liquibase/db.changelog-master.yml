@@ -1,6 +1,6 @@
 databaseChangeLog:
         - changeSet:
-            id: 1
+            id: 1.0.0
             author: luc
             comment: "Create table passenger"
             changes:
@@ -29,7 +29,7 @@ databaseChangeLog:
                           constraints:
                           nullable: false
         - changeSet:
-            id: 2
+            id: 2.0.0
             author: luc
             comment: "Create table plane"
             changes:
@@ -48,7 +48,7 @@ databaseChangeLog:
                         constraints:
                         nullable: false
         - changeSet:
-            id: 3
+            id: 3.0.0
             author: luc
             comment: "Create table routes"
             changes:
@@ -72,7 +72,7 @@ databaseChangeLog:
                         constraints:
                         nullable: false
         - changeSet:
-            id: 4
+            id: 4.0.0
             author: luc
             comment: "Create table ticket"
             changes:
@@ -128,7 +128,7 @@ databaseChangeLog:
                         onDelete: CASCADE
                         onUpdate: CASCADE
         - changeSet:
-            id: 5
+            id: 5.0.0
             author: luc
             comment: "Insert into passenger"
             changes:
@@ -145,7 +145,7 @@ databaseChangeLog:
               - sql:
                   sql: insert into passenger VALUES (6,'Lev','Lion','1845-09-15')
         - changeSet:
-            id: 6
+            id: 6.0.0
             author: luc
             comment: "Insert into plane"
             changes:
@@ -156,7 +156,7 @@ databaseChangeLog:
               - sql:
                   sql: insert into plane VALUES (3,'Boeing 787 Dreamliner')
         - changeSet:
-            id: 7
+            id: 7.0.0
             author: luc
             comment: "Insert into routes"
             changes:
@@ -171,7 +171,7 @@ databaseChangeLog:
               - sql:
                   sql: insert into routes VALUES (5,'Bali','Tehran')
         - changeSet:
-            id: 8
+            id: 8.0.0
             author: luc
             comment: "Insert into ticket"
             changes:

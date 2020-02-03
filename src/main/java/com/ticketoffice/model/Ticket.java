@@ -1,7 +1,7 @@
 package com.ticketoffice.model;
 
 public class Ticket {
-    private int idTicket;
+    private Integer id;
     private String date;
     private TypeSeat typeSeat;
     private int price;
@@ -12,8 +12,8 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(int idTicket, String date, TypeSeat typeSeat, int price, Plane plane, Passenger passenger, Routes routes) {
-        this.idTicket = idTicket;
+    public Ticket(Integer id, String date, TypeSeat typeSeat, int price, Plane plane, Passenger passenger, Routes routes) {
+        this.id = id;
         this.date = date;
         this.typeSeat = typeSeat;
         this.price = price;
@@ -31,12 +31,12 @@ public class Ticket {
         this.routes = routes;
     }
 
-    public int getIdTicket() {
-        return idTicket;
+    public Integer getIdTicket() {
+        return id;
     }
 
-    public void setIdTicket(int idTicket) {
-        this.idTicket = idTicket;
+    public void setIdTicket(Integer idTicket) {
+        this.id = id;
     }
 
     public String getDate() {

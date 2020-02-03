@@ -1,7 +1,7 @@
 package com.ticketoffice.model;
 
 public class Routes {
-    private int idRoutes;
+    private Integer id;
     private String departure;
     private String arrival;
 
@@ -13,18 +13,18 @@ public class Routes {
         this.arrival = arrival;
     }
 
-    public Routes(int idRoutes, String departure, String arrival) {
-        this.idRoutes = idRoutes;
+    public Routes(Integer id, String departure, String arrival) {
+        this.id = id;
         this.departure = departure;
         this.arrival = arrival;
     }
 
-    public int getIdRoutes() {
-        return idRoutes;
+    public Integer getIdRoutes() {
+        return id;
     }
 
     public void setIdRoutes(int idRoutes) {
-        this.idRoutes = idRoutes;
+        this.id = id;
     }
 
     public String getDeparture() {

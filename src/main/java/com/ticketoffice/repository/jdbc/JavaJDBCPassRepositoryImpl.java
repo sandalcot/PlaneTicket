@@ -3,6 +3,7 @@ package com.ticketoffice.repository.jdbc;
 import com.ticketoffice.model.Passenger;
 import com.ticketoffice.repository.PassengerRepository;
 import com.ticketoffice.util.ConnectionPool;
+import com.ticketoffice.util.PropertiesPool;
 import com.ticketoffice.util.mappers.PassObjectMapper;
 
 import java.io.IOException;
@@ -19,17 +20,6 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository {
     private static final String SELECT_ALL = "select * from " + PASS_TABLE;
     private static final String SELECT_BY_ID = SELECT_ALL + " where id_passenger = ?";
 
-    private Properties properties;
-
-    public JavaJDBCPassRepositoryImpl() {
-        try {
-            properties = new Properties();
-            properties.load(getClass().getClassLoader().getResourceAsStream("liquibase/liquibase.properties"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void create(Passenger passenger) throws Exception {
        setParameterPass(passenger, INSERT);
@@ -41,8 +31,8 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository {
     }
 
     @Override
-    public void delete(Integer id) throws SQLException, ClassNotFoundException, InterruptedException {
-        Connection connection = ConnectionPool.getInstanceConnection(properties).getConnection();
+    public void delete(Integer id) throws SQLException, ClassNotFoundException, InterruptedException, IOException {
+        Connection connection = ConnectionPool.getInstanceConnection().getConnection();
         try (PreparedStatement prepareStatement = connection.prepareStatement(DELETE)) {
             prepareStatement.setInt(1, id);
             prepareStatement.executeUpdate();
@@ -50,13 +40,13 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionPool.getInstanceConnection(properties).closeConnection(connection);
+            ConnectionPool.getInstanceConnection().closeConnection(connection);
         }
     }
 
     @Override
     public List<Passenger> getAll() throws IOException, SQLException, ClassNotFoundException, InterruptedException {
-        Connection connection = ConnectionPool.getInstanceConnection(properties).getConnection();
+        Connection connection = ConnectionPool.getInstanceConnection().getConnection();
         try (ResultSet resultSet = connection.createStatement()
                 .executeQuery(SELECT_ALL)) {
             List<Passenger> accounts = new ArrayList<>();
@@ -68,13 +58,13 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository {
             e.printStackTrace();
             return null;
         } finally {
-            ConnectionPool.getInstanceConnection(properties).closeConnection(connection);
+            ConnectionPool.getInstanceConnection().closeConnection(connection);
         }
     }
 
     @Override
     public Passenger getId(Integer id) throws Exception {
-        Connection connection = ConnectionPool.getInstanceConnection(properties).getConnection();
+        Connection connection = ConnectionPool.getInstanceConnection().getConnection();
         try (PreparedStatement prepareStatement = connection.prepareStatement(SELECT_BY_ID)) {
             prepareStatement.setInt(1, id);
             try (ResultSet resultSet = prepareStatement.executeQuery()) {
@@ -87,12 +77,12 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository {
             e.printStackTrace();
             return null;
         } finally {
-            ConnectionPool.getInstanceConnection(properties).closeConnection(connection);
+            ConnectionPool.getInstanceConnection().closeConnection(connection);
         }
     }
 
     private void setParameterPass(Passenger passenger, String query) throws Exception {
-        Connection connection = ConnectionPool.getInstanceConnection(properties).getConnection();
+        Connection connection = ConnectionPool.getInstanceConnection().getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, passenger.getName());
             preparedStatement.setString(2, passenger.getSurname());
@@ -102,12 +92,12 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionPool.getInstanceConnection(properties).closeConnection(connection);
+            ConnectionPool.getInstanceConnection().closeConnection(connection);
         }
     }
 
     private void updatePass(Passenger passenger, String query) throws Exception {
-        Connection connection = ConnectionPool.getInstanceConnection(properties).getConnection();
+        Connection connection = ConnectionPool.getInstanceConnection().getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, passenger.getName());
             preparedStatement.setString(2, passenger.getSurname());
@@ -118,7 +108,7 @@ public class JavaJDBCPassRepositoryImpl implements PassengerRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionPool.getInstanceConnection(properties).closeConnection(connection);
+            ConnectionPool.getInstanceConnection().closeConnection(connection);
         }
     }
 }

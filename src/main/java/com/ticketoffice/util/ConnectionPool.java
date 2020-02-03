@@ -1,5 +1,6 @@
 package com.ticketoffice.util;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,8 +15,11 @@ public class ConnectionPool {
     private static String USER;
     private static String PASSWORD;
     private static BlockingQueue<Connection> pool;
+    private Properties properties;
 
-    private ConnectionPool(Properties properties) throws SQLException, ClassNotFoundException {
+    private ConnectionPool() throws SQLException, ClassNotFoundException, IOException {
+        PropertiesPool propertiesPool = new PropertiesPool();
+        properties = propertiesPool.getProperties();
         String DRIVER = properties.getProperty("driver");
         Class.forName(DRIVER);
         URL = properties.getProperty("url");
@@ -25,9 +29,9 @@ public class ConnectionPool {
         initConnections();
     }
 
-    public static ConnectionPool getInstanceConnection(Properties properties) throws SQLException, ClassNotFoundException {
+    public static ConnectionPool getInstanceConnection() throws SQLException, ClassNotFoundException, IOException {
         if (instance == null)
-            instance = new ConnectionPool(properties);
+            instance = new ConnectionPool();
         return instance;
     }
 

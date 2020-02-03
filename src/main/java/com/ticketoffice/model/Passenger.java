@@ -3,7 +3,7 @@ package com.ticketoffice.model;
 import java.sql.Date;
 
 public class Passenger {
-    private int idPass;
+    private Integer id;
     private String name;
     private String surname;
     private String birthdate;
@@ -11,8 +11,8 @@ public class Passenger {
     public Passenger() {
     }
 
-    public Passenger(int idPass, String name, String surname, String birthdate) {
-        this.idPass = idPass;
+    public Passenger(Integer id, String name, String surname, String birthdate) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.birthdate = birthdate;
@@ -24,12 +24,12 @@ public class Passenger {
         this.birthdate = birthdate;
     }
 
-    public int getIdPass() {
-        return idPass;
+    public Integer getIdPass() {
+        return id;
     }
 
-    public void setIdPass(int idPass) {
-        this.idPass = idPass;
+    public void setIdPass(int id) {
+        this.id = id;
     }
 
     public String getName() {
